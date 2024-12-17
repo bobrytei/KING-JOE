@@ -1,0 +1,30 @@
+
+const express = require('express');
+const twilio = require('twilio');
+
+const app = express();
+
+const accountSid = 'your_account_sid';
+const authToken = 'your_auth_token';
+const client = new twilio(accountSid, authToken);
+
+app.post('/whatsapp', (req, res) => {
+  const message = req.body;
+  const from = message.From;
+  const body = message.Body;
+
+  if (body === 'hello') {
+    client.messages
+      .create({
+        from: '2348086966448',
+        to: from,
+        body: 'Hi! How can I assist you?',
+      })
+      .then((message) => console.log(message.sid))
+      .done();
+  }
+
+  res.end();
+});
+
+app.listen(3000, () => console.log('Server listening on port 3000'));
